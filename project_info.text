@@ -1,0 +1,25 @@
+Pattern Recognition Project : 
+
+Fake Product Review Detection
+
+Online marketplaces receive thousands of reviews, but many are fake or manipulated. These fake reviews mislead buyers and harm brand trust. Machine learning can analyze review patterns and detect suspicious or deceptive content.
+
+Objective
+To identify fake or deceptive reviews using NLP techniques.
+To classify reviews as genuine or fake with high accuracy.
+To reduce misinformation in online marketplaces.
+
+
+Dataset & Model Workflow
+Step 1: Data Collection
+Step 2:Data Preprocessing (Cleaning the Text)
+step 3:Feature Extraction (Turning Text into Numbers)
+Step 4:Pattern Recognition using Machine Learning
+
+
+Expected Outcome
+A model that Identify fake or deceptive reviews, Classify reviews as Genuine or Fake and  Reduce misinformation in online marketplaces
+
+
+My Github SSH : git@github.com:Arifulk/Pattern-Recognition.git
+
