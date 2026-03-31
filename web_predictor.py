@@ -318,27 +318,27 @@ HTML_PAGE = '''
             // Add Dashboard Process Flow
             html += `
                 <div class="process-flow">
-                    <h3>🔍 Analysis Dashboard (কিভাবে কাজ করলো?)</h3>
+                    <h3>🔍 Analysis Dashboard</h3>
                     
                     <div class="dashboard-step">
-                        <h4>1️⃣ Original Input (মডেল এ দেয়ার আগে)</h4>
+                        <h4>1️⃣ Original Input</h4>
                         <div style="color: #666; font-style: italic;">"${review}"</div>
                     </div>
                     
                     <div class="dashboard-step">
-                        <h4>2️⃣ Text Preprocessing (ক্লিনিং এবং স্টপ-ওয়ার্ড রিমুভাল)</h4>
+                        <h4>2️⃣ Text Preprocessing</h4>
                         <p style="font-size: 13px; color: #555;">Punctuation Removed + Lowercase + Stemming</p>
                         <div class="code-box">${data.cleaned_text || '(Empty)'}</div>
                     </div>
                     
                     <div class="dashboard-step">
                         <h4>3️⃣ Feature Extraction (TF-IDF Vectorization)</h4>
-                        <p style="font-size: 13px; color: #555;">মডেল যে শব্দগুলো থেকে প্যাটার্ন খুঁজছে (Keywords detected):</p>
+                        <p style="font-size: 13px; color: #555;">Keywords detected by the model:</p>
                         <div class="code-box">[ ${data.extracted_features.join(', ')} ]</div>
                     </div>
                     
                     <div class="dashboard-step">
-                        <h4>4️⃣ Model Prediction (মেশিন লার্নিং সিদ্ধান্ত)</h4>
+                        <h4>4️⃣ Model Prediction</h4>
                         <p style="font-size: 13px; color: #555;">Naive Bayes Algorithm Analysis:</p>
                         <div class="code-box">${isFake ? 'Class: Computer Generated (Fake) | ' : 'Class: Original (Genuine) | '} Probability: ${data.confidence.toFixed(2)}%</div>
                     </div>
