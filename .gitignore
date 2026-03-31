@@ -1,0 +1,7 @@
+.venv/
+.venv_linux/
+__pycache__/
+*.pyc
+1_Datasets/mega_dataset_1million.csv
+1_Datasets/fake\ reviews\ dataset.csv
+*.pkl

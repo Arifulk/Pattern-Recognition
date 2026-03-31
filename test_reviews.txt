@@ -1,0 +1,60 @@
+=====================================================
+TEST REVIEWS FOR MANUAL TESTING
+=====================================================
+Copy each review and paste on http://localhost:5000
+Check if prediction matches the label!
+=====================================================
+
+=== FAKE REVIEWS (Should detect as FAKE) ===
+
+1. Best product ever!!! Amazing quality!!! Must buy!!!
+
+2. Perfect perfect perfect five stars highly recommend
+
+3. This is the greatest thing I have ever purchased in my entire life
+
+4. Awesome awesome awesome buy it now you won't regret
+
+5. Outstanding product everyone should buy this incredible item
+
+6. Fantastic amazing wonderful excellent superb product highly satisfied
+
+7. Best seller great price fast shipping amazing quality perfect
+
+8. This product changed my life forever absolutely amazing purchase
+
+9. Five stars perfect no complaints best purchase ever made
+
+10. Excellent excellent excellent highly recommend to everyone amazing
+
+
+=== GENUINE REVIEWS (Should detect as GENUINE) ===
+
+11. Good product but the packaging was damaged during shipping. Overall satisfied.
+
+12. Works as described. Had some issues with setup but customer service helped. 3 months in, still working fine.
+
+13. Decent quality for the price. Not the best but does the job. Delivery took 5 days.
+
+14. The product is okay. Color was slightly different from the picture. Still usable though.
+
+15. Works well for my needs. Battery life could be better but acceptable for daily use.
+
+16. Good value for money. Build quality is decent. I've been using it for 2 weeks without problems.
+
+17. Satisfied with the purchase. The instructions were unclear but I figured it out. Does what it claims.
+
+18. Average product. Nothing special but nothing terrible either. Met my basic requirements.
+
+19. It works fine but feels a bit cheap. For the price I paid, it's acceptable. Arrived on time.
+
+20. Decent product. Had minor issues initially but they got resolved. Been using for a month now.
+
+=====================================================
+TESTING TIPS:
+- Copy one review at a time
+- Paste in the text box on localhost:5000
+- Click "Analyze Review" button
+- Check if result matches the label above
+- Note the confidence percentage
+=====================================================
