@@ -204,8 +204,7 @@ HTML_PAGE = '''
             margin-top: 20px;
             border-top: 2px dashed #ddd;
             padding-top: 20px;
-        }
-        .code-box {
+        }.code-box {
             background: #282c34;
             color: #abb2bf;
             padding: 10px;
@@ -214,7 +213,16 @@ HTML_PAGE = '''
             margin-top: 5px;
             word-wrap: break-word;
         }
+        
+        /* Chart Styles */
+        .chart-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            position: relative;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -290,9 +298,11 @@ HTML_PAGE = '''
             document.getElementById('loading').style.display = 'none';
         }
         
+        let currentChart = null;
+        
         function displayResult(data, review) {
             const resultDiv = document.getElementById('result');
-            const isFake = data.prediction === 'CG';
+            const isFake = data.prediction === 'CG' || data.prediction === 'fake';
             
             resultDiv.className = isFake ? 'fake' : 'genuine';
             
@@ -315,7 +325,18 @@ HTML_PAGE = '''
                 html += '</ul></div>';
             }
             
-            // Add Dashboard Process Flow
+            // Generate standard keys to deal with default CSV vs Mega CSV logic
+            let fakeProb = 0;
+            let genuineProb = 0;
+            if(data.probabilities['CG']) {
+                fakeProb = data.probabilities['CG'];
+                genuineProb = data.probabilities['OR'];
+            } else if (data.probabilities['fake']) {
+                fakeProb = data.probabilities['fake'];
+                genuineProb = data.probabilities['genuine'];
+            }
+            
+            // Add Dashboard Process Flow and Chart
             html += `
                 <div class="process-flow">
                     <h3>🔍 Analysis Dashboard</h3>
@@ -332,21 +353,55 @@ HTML_PAGE = '''
                     </div>
                     
                     <div class="dashboard-step">
-                        <h4>3️⃣ Feature Extraction (TF-IDF Vectorization)</h4>
-                        <p style="font-size: 13px; color: #555;">Keywords detected by the model:</p>
+                        <h4>3️⃣ Keywords detected by the model</h4>
                         <div class="code-box">[ ${data.extracted_features.join(', ')} ]</div>
                     </div>
                     
                     <div class="dashboard-step">
-                        <h4>4️⃣ Model Prediction</h4>
-                        <p style="font-size: 13px; color: #555;">Naive Bayes Algorithm Analysis:</p>
-                        <div class="code-box">${isFake ? 'Class: Computer Generated (Fake) | ' : 'Class: Original (Genuine) | '} Probability: ${data.confidence.toFixed(2)}%</div>
+                        <h4>4️⃣ Model Prediction Probability (Visual)</h4>
+                        <div class="chart-container">
+                            <canvas id="predictionChart"></canvas>
+                        </div>
                     </div>
                 </div>
             `;
             
             resultDiv.innerHTML = html;
             resultDiv.style.display = 'block';
+            
+            // Render Chart
+            const ctx = document.getElementById('predictionChart').getContext('2d');
+            
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            
+            currentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Fake', 'Genuine'],
+                    datasets: [{
+                        data: [fakeProb, genuineProb],
+                        backgroundColor: [
+                            'rgba(2ef, 83, 80, 0.8)', // Red
+                            'rgba(102, 187, 106, 0.8)' // Green
+                        ],
+                        borderColor: [
+                            'rgba(239, 83, 80, 1)',
+                            'rgba(102, 187, 106, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>
@@ -374,12 +429,17 @@ class RequestHandler(BaseHTTPRequestHandler):
             probability = model.predict_proba(vector)[0]
             confidence = float(max(probability) * 100)
             
+            # Identify class orders
+            classes = model.classes_
+            prob_dict = {str(classes[i]): float(probability[i] * 100) for i in range(len(classes))}
+            
             # Get extracted features
             feature_names = vectorizer.get_feature_names_out()
             nonzero_indices = vector.nonzero()[1]
             extracted_features = [feature_names[i] for i in nonzero_indices]
             
             # Generate reasons
+            
             reasons = []
             review_lower = review.lower()
             
@@ -402,7 +462,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                 'confidence': confidence,
                 'reasons': reasons,
                 'cleaned_text': cleaned,
-                'extracted_features': extracted_features
+                'extracted_features': extracted_features,
+                'probabilities': prob_dict
             }
             
             self.send_response(200)
